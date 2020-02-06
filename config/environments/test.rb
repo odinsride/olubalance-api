@@ -1,11 +1,12 @@
+# The test environment is used exclusively to run your application's
+# test suite. You never need to work with it otherwise. Remember that
+# your test database is "scratch space" for the test suite and is wiped
+# and recreated between test runs. Don't rely on the data there!
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is "scratch space" for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
+  config.cache_classes = false
 
   # Do not eager load code on boot. This avoids loading your whole application
   # just for the purpose of running a single test. If you are using a tool that
@@ -15,12 +16,13 @@ Rails.application.configure do
   # Configure public file server for tests with Cache-Control for performance.
   config.public_file_server.enabled = true
   config.public_file_server.headers = {
-    'Cache-Control' => "public, max-age=#{1.hour.seconds.to_i}"
+    'Cache-Control' => "public, max-age=#{1.hour.to_i}"
   }
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
+  config.cache_store = :null_store
 
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false
@@ -41,17 +43,4 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.active_storage.service = :amazondev
-
-  # # Paperclip settings
-  # config.paperclip_defaults = {
-  #   storage: :s3,
-  #   s3_credentials: {
-  #     bucket: ENV['S3_BUCKET_NAME_DEV'],
-  #     access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-  #     secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-  #     s3_region: ENV['S3_REGION'],
-  #     s3_host_name: ENV['S3_HOST_NAME']
-  #   },
-  #   s3_protocol: 'https'
-  # }
 end
