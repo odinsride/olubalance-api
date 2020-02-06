@@ -3,30 +3,10 @@
 class ApplicationController < ActionController::API
   before_action :set_timezone
 
-  before_action :assign_navbar_content
-  before_action :configure_permitted_parameters, if: :devise_controller?
-
-  def current_user
-    UserDecorator.decorate(super) unless super.nil?
-  end
-
-  def assign_navbar_content
-    @navbar_accounts = current_user.accounts if user_signed_in?
-  end
-
-  protected
-
-  def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up) \
-      { |u| u.permit(:first_name, :last_name, :timezone, :email, :password, :password_confirmation) }
-    devise_parameter_sanitizer.permit(:account_update) \
-      { |u| u.permit(:first_name, :last_name, :timezone, :email, :password, :current_password, :password_confirmation) }
-  end
-
   private
 
   def set_timezone
-    tz = current_user ? current_user.timezone : nil
+    tz = @current_user ? @current_user.timezone : nil
     Time.zone = tz || ActiveSupport::TimeZone['UTC']
   end
 end

@@ -1,27 +1,21 @@
 # frozen_string_literal: true
 
+require 'api_constraints.rb'
+
 Rails.application.routes.draw do
-  devise_for :users
-
-  get 'accounts/inactive' => 'accounts#inactive'
-
-  resources :accounts do
-    resources :transactions
-    resources :stashes do
-      scope except: %i[index show edit update destroy] do
-        resources :stash_entries
+  scope module: :api, defaults: { format: :json }, path: 'api' do
+    scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true), path: 'v1' do
+      post 'login', controller: :authentication, action: :authenticate
+      post 'register', controller: :users, action: :create
+      get 'user', controller: :users, action: :show
+      put 'user', controller: :users, action: :update
+      delete 'user', controller: :users, action: :destroy
+      get 'accounts/inactive', to: 'accounts#inactive'
+      put 'accounts/:id/deactivate', to: 'accounts#deactivate'
+      put 'accounts/:id/activate', to: 'accounts#activate'
+      resources :accounts do
+        resources :transactions
       end
     end
-
-    member do
-      get :deactivate
-      get :activate
-    end
   end
-
-  authenticated do
-    root to: 'accounts#index', as: :authenticated_root
-  end
-
-  root to: 'static_pages#home'
 end

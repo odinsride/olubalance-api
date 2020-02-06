@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-# Devise user class
+# User class
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+  has_secure_password
 
-  # validates :password_confirmation, presence: true
+  validates :password, presence: true, if: -> { new_record? || changes[:password_digest] }
+  validates :password, length: { minimum: 8 }, if: -> { new_record? || changes[:password_digest] }
+
+  validates :password_confirmation, presence: true, if: -> { new_record? || changes[:password_digest] }
 
   validates :email, presence: true,
                     uniqueness: { case_sensitive: false },
-                    format: Devise.email_regexp
-  validates :first_name, presence: { message: 'Please enter your First Name' }
-  validates :last_name, presence: { message: 'Please enter your Last Name' }
-  validates :timezone, presence: { message: 'Please select a Time Zone' }
+                    format: /@/
+  validates :first_name, presence: true
+  validates :last_name, presence: true
+  validates :timezone, presence: true
 
   has_many :accounts, dependent: :destroy
 end

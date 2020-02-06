@@ -29,8 +29,6 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
 
   # Include Devise helpers
-  config.include Devise::Test::IntegrationHelpers, type: :request
-
   config.include ActionView::Helpers::NumberHelper
   
   config.before(:suite) do

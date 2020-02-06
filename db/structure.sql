@@ -274,8 +274,8 @@ ALTER SEQUENCE public.transactions_id_seq OWNED BY public.transactions.id;
 
 CREATE TABLE public.users (
     id bigint NOT NULL,
-    email character varying DEFAULT ''::character varying NOT NULL,
-    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
+    email character varying NOT NULL,
+    password_digest character varying NOT NULL,
     reset_password_token character varying,
     reset_password_sent_at timestamp without time zone,
     remember_created_at timestamp without time zone,
@@ -584,6 +584,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191219035136'),
 ('20191220011006'),
 ('20191227150641'),
-('20200128211634');
+('20200128211634'),
+('20200206120112');
 
 

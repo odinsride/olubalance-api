@@ -3,9 +3,7 @@
 # A transaction record which belongs to one account. Can have one attached file
 class Transaction < ApplicationRecord
   belongs_to :account
-
   has_one :transaction_balance
-
   has_one_attached :attachment
 
   # Link running_balance to view
@@ -14,14 +12,12 @@ class Transaction < ApplicationRecord
   attr_accessor :trx_type
 
   # default_scope { order('trx_date, id DESC') }
-  validates :trx_type, presence: { message: 'Please select debit or credit' },
+  validates :trx_type, presence: true,
                        inclusion: { in: %w[credit debit] }
   validates :trx_date, presence: true
   validates :description, presence: true, length: { maximum: 150 }
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :memo, length: { maximum: 500 }
-
-  # before_post_process :rename_file
 
   before_save :convert_amount
   before_save :set_account
@@ -40,14 +36,14 @@ class Transaction < ApplicationRecord
     %w[Debit debit]
   end
 
-  # Search for transaction by description
-  def self.search(description)
-    if description
-      where('description ILIKE ?', "%#{description}%")
-    else
-      all
-    end
-  end
+  # # Search for transaction by description
+  # def self.search(description)
+  #   if description
+  #     where('description ILIKE ?', "%#{description}%")
+  #   else
+  #     all
+  #   end
+  # end
 
   private
 
@@ -74,10 +70,4 @@ class Transaction < ApplicationRecord
     # Rails 5.2 - amount_was is still valid in after_destroy callbacks
     @account.update(current_balance: @account.current_balance - amount_was)
   end
-
-  # def rename_file
-  #   extension = File.extname(attachment_file_name).downcase
-  #   file_description = description.squish.tr(' ', '_')
-  #   attachment.instance_write :file_name, "#{trx_date}_#{file_description}#{extension}"
-  # end
 end
