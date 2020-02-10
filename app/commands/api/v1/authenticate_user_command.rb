@@ -24,7 +24,7 @@ module Api
         if password_valid?
           @result = JwtService.encode(contents)
         else
-          errors.add(:base, I18n.t('authenticate_user_command.invalid_credentials'))
+          errors.add(:errors, I18n.t('authenticate_user_command.invalid_credentials'))
         end
       end
 

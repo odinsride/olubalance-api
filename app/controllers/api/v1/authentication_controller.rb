@@ -11,7 +11,7 @@ module Api
         if token_command.success?
           render json: { email: params[:email], jwt: token_command.result }
         else
-          render json: { error: token_command.errors }, status: :unauthorized
+          render json: token_command.errors, status: :unauthorized
         end
       end
     end

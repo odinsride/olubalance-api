@@ -37,11 +37,11 @@ module Api
       private
 
       def render_unprocessable_entity_response(exception)
-        render json: { error: exception.record.errors }, status: :unprocessable_entity
+        render json: exception.record.errors, status: :unprocessable_entity
       end
 
       def render_not_found_response
-        render json: { error: 'Not found' }, status: :not_found
+        render json: { errors: 'Not found' }, status: :not_found
       end
     end
   end

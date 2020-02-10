@@ -16,6 +16,7 @@ gem 'jwt'
 gem 'pg', '~> 1.1.4'
 gem 'puma', '~> 4.3.1'
 gem 'rails', '~> 6.0.2.1'
+gem 'rack-cors'
 
 group :development, :test do
   gem 'database_cleaner', '~> 1.7.0'

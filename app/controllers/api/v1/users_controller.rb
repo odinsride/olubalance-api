@@ -12,7 +12,7 @@ module Api
           @user = UserSerializer.new(@user).serializable_hash
           render json: @user, status: :created
         else
-          render json: { error: @user.errors.full_messages }, status: :bad_request
+          render json: { errors: @user.errors.full_messages }, status: :bad_request
         end
       end
 
@@ -21,8 +21,11 @@ module Api
       end
 
       def update
-        @user.update!(user_params)
-        render json: UserSerializer.new(@user).serializable_hash, status: :ok
+        if @user.update(user_params)
+          render json: UserSerializer.new(@user).serializable_hash, status: :ok
+        else
+          render json: { errors: @user.errors.full_messages }, status: :bad_request
+        end
       end
 
       def destroy
