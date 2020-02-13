@@ -7,7 +7,7 @@ module Api
       skip_before_action :authenticate_user, only: %i[create]
 
       def create
-        @user = User.new(user_params)
+        @user = User.new(user_params).decorate
         if @user.save
           @user = UserSerializer.new(@user).serializable_hash
           render json: @user, status: :created
@@ -46,7 +46,7 @@ module Api
       end
 
       def set_user
-        @user = current_user
+        @user = current_user.decorate
       end
     end
   end

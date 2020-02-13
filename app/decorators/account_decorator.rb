@@ -8,7 +8,7 @@ class AccountDecorator < ApplicationDecorator
   include Draper::LazyHelpers
 
   # Display the account name with last four if present
-  def account_name
+  def d_account_name
     last_four.present? ? name + ' ( ... ' + last_four.to_s + ')' : name
   end
 
@@ -18,38 +18,38 @@ class AccountDecorator < ApplicationDecorator
   end
 
   # Truncate the account name on Accound cards if too long
-  def account_card_title
+  def d_account_card_title
     name_too_long ? name[0..Account::DISPLAY_NAME_LIMIT] + '...' : name
   end
 
   # Display the last four digits of the account
-  def last_four_display
+  def d_last_four
     last_four.present? ? 'xx' + last_four.to_s : nil
   end
 
   # Display the current account balance in currency format
-  def current_balance_display
+  def d_current_balance
     number_to_currency(current_balance)
   end
 
   # Display the pending account balance in currency format
-  def pending_balance_display
+  def d_pending_balance
     number_to_currency(pending_balance)
   end
 
   # Display the non-pending account balance in currency format
-  def non_pending_balance_display
+  def d_non_pending_balance
     number_to_currency(non_pending_balance)
   end
 
   # Display the account name with current balance
-  def account_name_balance
-    name + ' (' + current_balance_display + ')'
+  def d_account_name_balance
+    name + ' (' + d_current_balance + ')'
   end
 
   # Display the descriptive last updated at date for the account
-  def updated_at_display
-    updated_at.in_time_zone(current_user.timezone).strftime('%b %d, %Y @ %I:%M %p %Z')
+  def d_updated_at
+    updated_at.in_time_zone(self.user.timezone).strftime('%b %d, %Y @ %I:%M %p %Z')
   end
 
   # Simple check if the account balance is negative
@@ -60,9 +60,5 @@ class AccountDecorator < ApplicationDecorator
   # Set the balance color to red if the amount is negative
   def balance_color
     balance_negative? ? 'has-text-danger' : 'has-text-grey'
-  end
-
-  def noaccounts_partial
-    render partial: 'noaccounts', locals: { description: NO_ACCOUNT_DESC } if @accounts.empty?
   end
 end

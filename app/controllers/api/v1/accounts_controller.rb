@@ -8,13 +8,19 @@ module Api
       # GET /accounts
       # GET /accounts.json
       def index
-        @accounts = current_user.accounts.where(active: true).order('created_at ASC')
+        @accounts = current_user.accounts
+                      .where(active: true)
+                      .order('created_at ASC')
+                      .decorate
         @accounts = AccountSerializer.new(@accounts).serialized_json
         render json: @accounts
       end
 
       def inactive
-        @inactiveaccounts = current_user.accounts.where(active: false).order('created_at ASC')
+        @inactiveaccounts = current_user.accounts
+                              .where(active: false)
+                              .order('created_at ASC')
+                              .decorate
         @inactiveaccounts = AccountSerializer.new(@inactiveaccounts).serialized_json
         render json: @inactiveaccounts
       end
@@ -30,7 +36,7 @@ module Api
       def create
         @account = current_user.accounts.build(account_params)
         @account.save!
-        render json: AccountSerializer.new(@account).serialized_json,
+        render json: AccountSerializer.new(@account.decorate).serialized_json,
                status: :created,
                location: @account
       end
@@ -67,7 +73,7 @@ module Api
 
       # Use callbacks to share common setup or constraints between actions.
       def set_account
-        @account = current_user.accounts.find(params[:id])
+        @account = current_user.accounts.find(params[:id]).decorate
       end
 
       # Never trust parameters from the scary internet, only allow the white list through.

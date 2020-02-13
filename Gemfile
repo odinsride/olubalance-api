@@ -9,6 +9,7 @@ ruby '2.6.5'
 gem 'aws-sdk-s3', '~> 1.60.0'
 gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', '>= 1.4.2', require: false
+gem 'draper'
 gem 'fast_jsonapi'
 gem 'figaro', '~> 1.1.1'
 gem 'jwt'
